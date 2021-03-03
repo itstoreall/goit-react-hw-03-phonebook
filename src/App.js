@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from './components/PhonebookForm';
 import ContactList from './components/ContactList';
 import Filter from './components/Filter';
 import PropTypes from 'prop-types';
-
 import { wrapper, title, subtitle } from './App.module.scss';
 
 const App = ({ initialValue }) => {
@@ -27,8 +26,19 @@ const App = ({ initialValue }) => {
     contact.name.toLowerCase().includes(normalizedFilter),
   );
 
+  // Deletes contact
   const handleDeleteContact = id =>
     setContacts(contacts.filter(contact => contact.id !== id));
+
+  // Получает контакты из localStorage
+  useEffect(() => {
+    setContacts(JSON.parse(localStorage.getItem('contacts')));
+  }, []);
+
+  // Добавляет контакты в localStorage
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
   return (
     <div className={wrapper}>
